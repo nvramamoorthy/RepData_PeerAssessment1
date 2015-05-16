@@ -230,11 +230,54 @@ Points to be noted:
 
 ##Are there differences in activity patterns between weekdays and weekends?
 
-For this part the weekdays() function may be of some help here. Use the dataset with the filled-in missing values for this part.
 
-    Create a new factor variable in the dataset with two levels -- "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
+    Use the dataset with the filled-in missing values for this part. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+    Make a panel plot containing a time series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
-    Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). The plot should look something like the following, which was created using simulated data:
+Create a factor variable weektime with two levels (weekday, weekend). The folowing dataset t5 dataset contains data: average number of steps taken averaged across all weekday days and weekend days, 5-min intervals, and a facter variable weektime with two levels (weekday, weekend).
 
 
+```{r}
+t1$weektime <- as.factor(ifelse(weekdays(t1$date) %in% 
+                c("Saturday","Sunday"),"weekend", "weekday"))
 
+t5 <- sqldf('   
+    SELECT interval, avg(steps) as "mean.steps", weektime
+    FROM t1
+    GROUP BY weektime, interval
+    ORDER BY interval ')
+
+```
+
+Make a panel plot containing a time series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+
+
+```{r}
+library("lattice")
+p <- xyplot(mean.steps ~ interval | factor(weektime), data=t5, 
+       type = 'l',
+       main="Average Number of Steps Taken 
+       \nAveraged Across All Weekday Days or Weekend Days",
+       xlab="5-Minute Interval (military time)",
+       ylab="Average Number of Steps Taken")
+print (p)    
+
+```
+To be noted:
+
+    Are there differences in activity patterns between weekdays and weekends? Yes. The plot indicates that the person moves around more (or more active) during the weekend days
+
+
+##Conclusion
+
+This assignment is purely to demonstrate concept of Reproducible Research using Knitr and Rmd coding.
+
+The data analysis started from loading data, transform data including the strategy and implementation of dealing with missing data, and reporting statistical data and plots. 
+
+
+My firends who are taking the course should be able to follow the document and reproduce the same results. 
+
+The document was prepared with RStudio Version 0.98.1103  on Mac OS X v10.10.4 Yosemite
+
+
+Thank you all ...
