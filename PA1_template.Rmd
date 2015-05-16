@@ -125,19 +125,108 @@ qplot(x=interval, y=mean, data = interval.mean.steps,  geom = "line",
       )
 ```
 
+Report the 5-min interval, on average across all the days in the dataset, contains the maximum number of steps:
+
+```{r}
+
+interval.mean.steps[which.max(interval.mean.steps$mean), ]
+
+```
+
+Observations:
+
+Based on steps taken pattern, the person's daily activity peaks around 835th  5-minute interval 
+
 
 
 ##Imputing missing values
 
-Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
+There are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data. In this section:
 
     Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+    Implement a strategy for filling in all of the missing values in the dataset. For this assignment the strategy is to use the mean for that 5-minute interval to replace missing valuse. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+    Make a histogram of the total number of steps taken each day
+    Calculate and report the mean and median total number of steps taken per day.
+    Make following comments: Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
-    Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 
-    Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
-    Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+```{r}
+library(sqldf)
+```
+
+```{r}
+tNA <- sqldf(' 
+    SELECT d.*            
+    FROM "activity" as d
+    WHERE d.steps IS NULL 
+    ORDER BY d.date, d.interval ')
+```
+
+```{r}
+NROW(tNA) 
+```
+Implement a strategy for filling in all of the missing values in the dataset. For this assignment the strategy is to use the mean for that 5-minute interval to replace missing valuse. Create a new dataset (t1) that is equal to the original dataset but with the missing data filled in. The dataset is ordered by date and interval. The following SQL statement combines the original “data” dataset set and the “interval.mean.steps” dataset that contains mean values of each 5-min interval ageraged across all days.
+
+```{r}
+t1 <- sqldf('  
+    SELECT d.*, i.mean
+    FROM "interval.mean.steps" as i
+    JOIN "activity" as d
+    ON d.interval = i.interval 
+    ORDER BY d.date, d.interval ') 
+
+t1$steps[is.na(t1$steps)] <- t1$mean[is.na(t1$steps)]
+```
+
+
+
+In the following, prepare data for plot histogram calculate mean and median:
+
+```{r}
+t1.total.steps <- as.integer( sqldf(' 
+    SELECT sum(steps)  
+    FROM t1') );
+
+t1.total.steps.by.date <- sqldf(' 
+    SELECT date, sum(steps) as "t1.total.steps.by.date" 
+    FROM t1 GROUP BY date 
+    ORDER BY date') 
+
+
+```
+
+```{r}
+daily.61.steps <- sqldf('   
+    SELECT date, "t1.total.steps.by.date" as "steps"
+    FROM "t1.total.steps.by.date"
+    ORDER BY date') 
+```
+Plot  a histogram of the total number of steps taken each day.
+```{r}
+hist(daily.61.steps$steps, 
+     main=" ",
+     breaks=10,
+     xlab="After Imputate NA -Total Number of Steps Taken Daily")
+```
+Calculate and report the mean and median total number of steps taken per day. 
+
+
+```{r}
+t1.mean.steps.per.day <- as.integer(t1.total.steps / NROW(t1.total.steps.by.date) )
+t1.mean.steps.per.day
+```
+```{r}
+t1.median.steps.per.day <- median(t1.total.steps.by.date$t1.total.steps.by.date)
+t1.median.steps.per.day
+```
+Points to be noted:
+
+    Do these values (mean and median) differ from the estimates from the first part of the assignment? Not Really.
+
+    What is the impact of imputing missing data on the estimates of the total daily number of steps? The shape of the histogram remains the same as the histogram from removed missing values. However, the frequency counts increased as expected. In this case, it seems that the data imputation strategy should work for the downstream data analysis and modeling.
+
 
 ##Are there differences in activity patterns between weekdays and weekends?
 
