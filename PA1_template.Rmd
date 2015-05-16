@@ -4,7 +4,7 @@ author: "nvramamoorthy"
 date: "16 May 2015"
 output: html_document
 ---
-#Reproducible research : Peer Assignment 1
+#Reproducible Research : Peer Assignment 1
 
 ##Initial Setup
 
@@ -45,6 +45,8 @@ The dataset is stored in a comma-separated-value (CSV) file and there are a tota
 
 ```{r}
 activity<-read.csv("activity.csv" , header=TRUE)
+activity$date <- as.Date(activity$date) 
+
 ```
 ##Checking the contents of the Data
 ```{r}
@@ -68,11 +70,37 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 
 ##What is mean total number of steps taken per day?
 
-For this part of the assignment, you can ignore the missing values in the dataset.
+For this part of the assignment,  the missing values were ignored in the dataset.
 
     Make a histogram of the total number of steps taken each day
 
     Calculate and report the mean and median total number of steps taken per day
+
+```{r}
+activity.ignore.na <- na.omit(activity) 
+
+# sum steps by date
+daily.steps <- rowsum(activity.ignore.na$steps, format(activity.ignore.na$date, '%Y-%m-%d')) 
+daily.steps <- data.frame(daily.steps) 
+names(daily.steps) <- ("steps") 
+
+```
+
+Plot histogram of the total number of steps taken each day:
+
+```{r}
+hist(daily.steps$steps, 
+     main=" ",
+     breaks=10,
+     xlab="Total Number of Steps Taken Daily")
+```
+Compute  mean and median of steps:
+
+```{r}
+mean(daily.steps$steps);
+median(daily.steps$steps)
+```
+
 
 ##What is the average daily activity pattern?
 
