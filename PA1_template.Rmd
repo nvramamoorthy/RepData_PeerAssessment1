@@ -94,6 +94,8 @@ hist(daily.steps$steps,
      breaks=10,
      xlab="Total Number of Steps Taken Daily")
 ```
+
+
 Compute  mean and median of steps:
 
 ```{r}
