@@ -67,9 +67,9 @@ img {
 <h1>Reproducible Research : Peer Assignment 1</h1>
 <div id="initial-setup" class="section level2">
 <h2>Initial Setup</h2>
-<p>For the purpose of assignment a directory “~/Desktop/Reproducible Research/Peer-Assignment-1/RepData_PeerAssessment1” is created on my MacBook The suggested</p>
-<p>GitHub repository “forked from rdpeng/RepData_PeerAssessment1” needed is forked and cloned on my DeskTop.</p>
-<p>“activity.zip” was unziped and activity.csv file is kept for further processing</p>
+<p>For the purpose of assignment a directory “~/Desktop/Reproducible Research/Peer-Assignment-1/RepData_PeerAssessment1” is created on my MacBook .</p>
+<p>The suggested GitHub repository “forked from rdpeng/RepData_PeerAssessment1” needed is forked and cloned on my DeskTop.</p>
+<p>The file “activity.zip” was unziped and activity.csv file is kept for further processing</p>
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
@@ -186,7 +186,7 @@ Make following comments: Do these values differ from the estimates from the firs
     ORDER BY d.date, d.interval ') 
 
 t1$steps[is.na(t1$steps)] &lt;- t1$mean[is.na(t1$steps)]</code></pre>
-<p>In the following, prepare data for plot histogram calculate mean and median:</p>
+<p>In the following, prepare data for plotting histogram calculate mean and median:</p>
 <pre class="r"><code>t1.total.steps &lt;- as.integer( sqldf(' 
     SELECT sum(steps)  
     FROM t1') );

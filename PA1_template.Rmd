@@ -6,15 +6,13 @@ output: html_document
 ---
 #Reproducible Research : Peer Assignment 1
 
+
 ##Initial Setup
+For the purpose of assignment a directory "~/Desktop/Reproducible Research/Peer-Assignment-1/RepData_PeerAssessment1" is created on my MacBook .
 
+The suggested GitHub repository "forked from rdpeng/RepData_PeerAssessment1" needed is forked and cloned  on my DeskTop.
 
-For the purpose of assignment a directory "~/Desktop/Reproducible Research/Peer-Assignment-1/RepData_PeerAssessment1" is created on my MacBook 
-The suggested 
-
-GitHub repository "forked from rdpeng/RepData_PeerAssessment1" needed is forked and cloned  on my DeskTop.
-
-"activity.zip" was unziped and activity.csv file is kept for further processing
+The file "activity.zip" was unziped and activity.csv file is kept for further processing
 
 ##Data
 
@@ -184,7 +182,7 @@ t1$steps[is.na(t1$steps)] <- t1$mean[is.na(t1$steps)]
 
 
 
-In the following, prepare data for plot histogram calculate mean and median:
+In the following, prepare data for plotting histogram calculate mean and median:
 
 ```{r}
 t1.total.steps <- as.integer( sqldf(' 
