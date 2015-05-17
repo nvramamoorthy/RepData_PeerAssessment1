@@ -223,6 +223,9 @@ t1.mean.steps.per.day
 t1.median.steps.per.day <- median(t1.total.steps.by.date$t1.total.steps.by.date)
 t1.median.steps.per.day
 ```
+
+
+
 Points to be noted:
 
     Do these values (mean and median) differ from the estimates from the first part of the assignment? Not Really.
@@ -265,7 +268,10 @@ p <- xyplot(mean.steps ~ interval | factor(weektime), data=t5,
 print (p)    
 
 ```
-To be noted:
+
+
+
+Points To be noted:
 
     Are there differences in activity patterns between weekdays and weekends? Yes. The plot indicates that the person moves around more (or more active) during the weekend days
 
